@@ -115,8 +115,8 @@ vim.opt.number = true
 --  Experiment for yourself to see if you like it!
 -- vim.opt.relativenumber = true
 
--- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+-- Enable mousr for normal and visual mode.
+vim.opt.mouse = 'nv'
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
@@ -203,6 +203,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
+  end,
+})
+
+-- Automatically source the init.lua file after saving it
+-- This is useful for when you're editing your configuration
+-- and want to see the changes immediately.
+
+vim.api.nvim_create_autocmd('BufWritePost', {
+  desc = 'Reload configuration',
+  group = vim.api.nvim_create_augroup('kickstart-reload-config', { clear = true }),
+  callback = function()
+    vim.cmd 'source $MYVIMRC'
   end,
 })
 
@@ -855,17 +867,11 @@ require('lazy').setup({
         },
         sources = {
           {
-            name = 'lazydev',
-            -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
-            group_index = 0,
-          },
-          {
             name = 'copilot',
             group_index = 1,
             priority = 1,
           },
           { name = 'luasnip' },
-          { name = 'buffer' },
           { name = 'nvim_lsp' },
           { name = 'path' },
         },
