@@ -171,6 +171,9 @@ vim.opt.scrolloff = 100
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Map <leader>ft to go back to the directory of the current file
+vim.keymap.set('n', '<leader>ft', '<cmd>lcd %:p:h<CR>', { desc = 'Change [T]o File Directory' })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -206,17 +209,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- Automatically source the init.lua file after saving it
--- This is useful for when you're editing your configuration
--- and want to see the changes immediately.
-
-vim.api.nvim_create_autocmd('BufWritePost', {
-  desc = 'Reload configuration',
-  group = vim.api.nvim_create_augroup('kickstart-reload-config', { clear = true }),
-  callback = function()
-    vim.cmd 'source $MYVIMRC'
-  end,
-})
+-- In visual mode, if you select a group of text
+-- and press <leader>ai it with send an autocmd to
+-- trigger a query to copilot to generate documentation
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -869,11 +864,10 @@ require('lazy').setup({
           {
             name = 'copilot',
             group_index = 1,
-            priority = 1,
           },
-          { name = 'luasnip' },
-          { name = 'nvim_lsp' },
-          { name = 'path' },
+          { name = 'luasnip', group_index = 1 },
+          { name = 'nvim_lsp', group_index = 1 },
+          { name = 'path', group_index = 1 },
         },
       }
     end,
